@@ -13,13 +13,23 @@
   <meta property="og:image" content="https://dermaa.app/assets/shot_dashboard.png" />
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="canonical" href="https://dermaa.app/skincare-routine-tracker.html" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="theme-color" content="#F5F0EB" />
+  <!-- Sets the theme before first paint (no flash). Kept inline on purpose. -->
+  <script>
+  (function(){var d=document.documentElement,t=null;try{t=localStorage.getItem('dermaa_theme')}catch(e){}
+  if(t!=='light'&&t!=='dark')t=window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  d.setAttribute('data-theme',t);d.className+=' js';
+  if((window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)||/[?&]motion=off/.test(location.search))d.className+=' reduce';
+  setTimeout(function(){if(!window.__dermaaReady)d.className=d.className.replace(' js','')},4000);})();
+  </script>
   <link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48.png" />
   <link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png" />
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Lora:ital,wght@1,500;1,600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=7" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Lora:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=8" />
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -35,12 +45,19 @@
   <header class="nav">
     <div class="wrap nav-inner">
       <a class="brand" href="index.html"><img src="assets/app_icon.png" alt="" />Dermaa</a>
-      <nav class="nav-links">
+      <nav class="nav-links" id="nav-links">
         <a href="index.html#features">Features</a>
         <a href="index.html#premium">Premium</a>
         <a href="index.html#faq">FAQ</a>
-        <a class="btn-outline" href="index.html#download" data-track="nav_get_app">Get the app</a>
       </nav>
+      <button class="icon-btn theme-toggle" type="button" data-theme-toggle data-track="theme_toggle" aria-label="Switch to dark theme">
+        <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4" /><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" /></svg>
+        <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.4 6.4 0 0 0 10.5 10.5z" /></svg>
+      </button>
+      <a class="btn-outline" href="index.html#download" data-track="nav_get_app">Get the app</a>
+      <button class="icon-btn nav-menu" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav-links">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+      </button>
     </div>
   </header>
 
@@ -142,7 +159,7 @@
       </details>
     </div>
 
-    <div class="doc-cta">
+    <div class="doc-cta on-forest">
       <h2>Start your routine with Dermaa</h2>
       <p>Coming soon to Google Play. Leave your email and we'll tell you the
       day it launches.</p>
@@ -172,5 +189,6 @@
     </div>
   </footer>
   <script src="assets/track.js?v=2" defer></script>
+  <script src="assets/site.js?v=1" defer></script>
 </body>
 </html>
