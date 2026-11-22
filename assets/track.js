@@ -74,7 +74,12 @@
   }
   touchSession();
 
-  var path = location.pathname === '/index.html' ? '/' : location.pathname;
+  // One name per page, whichever host serves it: GitHub Pages answers at
+  // /privacy.html, Cloudflare Pages redirects that to /privacy. Report the
+  // .html form both ways so the CRM's history does not split in two.
+  var path = location.pathname;
+  if (path === '/index.html' || path === '/index') path = '/';
+  else if (path !== '/' && !/\.[a-z0-9]+$/i.test(path)) path = path.replace(/\/$/, '') + '.html';
   var params = new URLSearchParams(location.search);
   var utm = {
     source: params.get('utm_source'),

@@ -23,3 +23,7 @@ Use port 8124, not 8123: 8123 is an allowed analytics origin, so previewing ther
 ## Real screenshots
 
 The phones on the homepage are HTML mockups. To add real screenshots, put PNGs in `assets/shots/` and uncomment the `.real-shots` block in `index.html` (search for "Real screenshots").
+
+## Hosting
+
+Moving from GitHub Pages to Cloudflare Pages (so the repo can be private on the free plan). Cloudflare Pages serves `privacy.html` at `/privacy` and redirects the `.html` form there, so canonical URLs and the sitemap use the extensionless form. GitHub Pages answers at both, so this works on either host. `track.js` reports every page by its `.html` name so analytics history stays continuous.
