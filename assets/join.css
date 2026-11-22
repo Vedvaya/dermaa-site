@@ -1,0 +1,157 @@
+/* Dermaa launch-offer page (/join) — the Yes/No question, the runaway No,
+   the email step and the celebration. Tokens come from ../styles.css. */
+
+@keyframes join-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+@keyframes join-sway { from { transform: rotate(-4deg); } to { transform: rotate(5deg); } }
+@keyframes join-in { from { opacity: 0; transform: translateY(14px); } }
+@keyframes join-pop { from { opacity: 0; transform: scale(0.5); } }
+@keyframes join-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(122, 155, 104, 0.45); }
+  50% { box-shadow: 0 0 0 14px rgba(122, 155, 104, 0); }
+}
+
+.join-page {
+  min-height: 100vh; min-height: 100svh;
+  display: flex; flex-direction: column;
+  background:
+    radial-gradient(60% 50% at 85% 10%, rgba(122, 155, 104, 0.16), transparent 70%),
+    radial-gradient(50% 40% at 10% 90%, rgba(196, 145, 74, 0.10), transparent 70%),
+    var(--bg);
+}
+.join-nav .theme-toggle { margin-left: auto; }
+.js .join-nav > .theme-toggle { margin-left: auto; }
+
+.join-leaves { position: fixed; inset: 0; pointer-events: none; color: var(--primary); z-index: 0; }
+.join-leaves .leaf { position: absolute; fill: currentColor; opacity: 0.16; transform-origin: 20% 100%; animation: join-sway 10s ease-in-out infinite alternate; }
+.join-leaves .leaf-a { width: 160px; height: 266px; right: -30px; top: 70px; rotate: 10deg; }
+.join-leaves .leaf-b { width: 120px; height: 200px; left: -40px; bottom: 40px; rotate: -26deg; animation-duration: 12s; }
+.join-leaves .leaf-c { width: 70px; height: 116px; left: 12%; top: 90px; rotate: 32deg; opacity: 0.11; animation-duration: 14s; }
+
+.join-main {
+  position: relative; z-index: 1; flex: 1;
+  display: flex; align-items: flex-start; justify-content: center;
+  padding: 92px 18px 40px;
+}
+
+/* The card is the containing block for the runaway No: nothing between the
+   two may be positioned or transformed, or No's coordinates break. */
+.join-card {
+  position: relative; width: 100%; max-width: 560px;
+  background: var(--card); border: 1px solid var(--border); border-radius: 28px;
+  padding: 64px 34px 30px; text-align: center;
+  box-shadow: 0 24px 60px rgba(45, 59, 40, 0.12);
+}
+[data-theme="dark"] .join-card { background: var(--surface-alt); box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45); }
+
+/* Sage sits on the card's top edge. */
+.join-sage { position: absolute; left: 50%; top: -58px; width: 104px; margin-left: -52px; }
+.join-sage canvas { display: block; }
+.js:not(.reduce) .join-sage canvas { animation: join-pop 0.6s cubic-bezier(0.3, 1.5, 0.5, 1) 0.2s both; }
+.join-bubble {
+  position: absolute; left: 86%; bottom: 60%; width: max-content; max-width: 210px;
+  background: var(--card); border: 1px solid var(--border); color: var(--ink);
+  border-radius: 16px 16px 16px 4px; padding: 9px 13px;
+  font-size: 0.88rem; line-height: 1.35; font-weight: 500; text-align: left;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.12);
+  transform-origin: 0 100%;
+  transition: opacity 0.15s ease;
+}
+[data-theme="dark"] .join-bubble { background: var(--surface-high, #2B3027); border-color: var(--border-strong); }
+.js:not(.reduce) .join-bubble { animation: join-pop 0.45s cubic-bezier(0.3, 1.4, 0.5, 1) 0.8s both; }
+.join-bubble.bump { animation: join-pop 0.35s cubic-bezier(0.3, 1.4, 0.5, 1) both !important; }
+
+/* Stages. Without JS, show the offer and the form; No and the celebration stay out. */
+.js .stage { display: none; }
+.js [data-stage="ask"] .stage-ask,
+.js [data-stage="email"] .stage-email,
+.js [data-stage="done"] .stage-done { display: block; }
+.js:not(.reduce) [data-stage="email"] .stage-email,
+.js:not(.reduce) [data-stage="done"] .stage-done { animation: join-in 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+html:not(.js) .join-sage, html:not(.js) .stage-done, html:not(.js) .choices, html:not(.js) .choices-note, html:not(.js) .js-only { display: none; }
+html:not(.js) .stage-email { margin-top: 26px; padding-top: 22px; border-top: 1px solid var(--border); }
+
+.join-card h1 { font-size: clamp(2.1rem, 7vw, 2.9rem); margin-bottom: 18px; }
+.join-card h2 { font-size: clamp(1.5rem, 5vw, 2rem); margin-bottom: 14px; }
+.join-card h2 em { font-style: italic; color: var(--primary-strong); }
+.join-card h2:focus { outline: none; }
+
+.offer { list-style: none; display: grid; gap: 10px; margin: 0 auto 26px; max-width: 30em; text-align: left; }
+.offer li {
+  display: flex; align-items: flex-start; gap: 12px;
+  background: var(--primary-container); border-radius: 16px; padding: 12px 14px;
+  color: var(--text); font-size: 0.97rem; line-height: 1.45;
+}
+.offer li:nth-child(2) { background: var(--gold-container); }
+.offer strong { color: var(--ink); }
+.js:not(.reduce) .offer li { animation: join-in 0.5s ease both; }
+.js:not(.reduce) .offer li:nth-child(1) { animation-delay: 0.25s; }
+.js:not(.reduce) .offer li:nth-child(2) { animation-delay: 0.4s; }
+.offer-icon {
+  flex: none; width: 34px; height: 34px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--card); color: var(--primary-strong);
+}
+.offer-icon.gold { color: var(--gold); }
+.offer-icon svg { width: 19px; height: 19px; }
+[data-theme="dark"] .offer-icon { background: var(--bg); }
+
+/* Yes and the runaway No */
+.choices { display: flex; justify-content: center; align-items: center; gap: 16px; min-height: 92px; }
+.btn-yes {
+  font-size: 1.15rem; padding: 15px 40px;
+  transform: scale(var(--grow, 1));
+  transition: transform 0.35s cubic-bezier(0.3, 1.5, 0.5, 1), background-color 0.2s ease;
+}
+.btn-yes:hover { transform: scale(calc(var(--grow, 1) * 1.04)); }
+.btn-yes:active { transform: scale(calc(var(--grow, 1) * 0.97)); }
+.js:not(.reduce) .btn-yes { animation: join-pulse 2.4s ease-in-out 1.4s infinite; }
+.btn-no {
+  font: inherit; font-weight: 600; font-size: 1rem; white-space: nowrap;
+  padding: 13px 26px; border-radius: 28px; cursor: pointer;
+  background: var(--card); color: var(--text-soft); border: 1.5px solid var(--border-strong);
+  transform: scale(var(--shrink, 1));
+  transition: transform 0.25s ease, opacity 0.3s ease;
+  touch-action: none; -webkit-user-select: none; user-select: none;
+}
+[data-theme="dark"] .btn-no { background: var(--surface-alt); }
+/* Once it has run, No is positioned against the card by its own transform. */
+.btn-no.free {
+  position: absolute; left: 0; top: 0; z-index: 5; margin: 0;
+  transform: translate(var(--x, 0px), var(--y, 0px)) scale(var(--shrink, 1));
+}
+.js:not(.reduce) .btn-no.free.moving { transition: transform 0.38s cubic-bezier(0.3, 1.35, 0.5, 1), opacity 0.3s ease; }
+.btn-no.gone { opacity: 0; --shrink: 0.2; pointer-events: none; }
+.choices-note { min-height: 1.5em; margin-top: 6px; font-weight: 600; color: var(--primary-strong); }
+.js:not(.reduce) .choices-note:not(:empty) { animation: join-in 0.4s ease both; }
+
+/* Email */
+.stage-email .lead-form { margin: 18px auto 0; text-align: left; }
+.stage-email .lead-fine { margin-top: 4px; line-height: 1.5; }
+
+/* Done */
+.done-lead { font-size: 1.08rem; color: var(--text); margin-bottom: 6px; }
+.done-sub { color: var(--text-soft); margin-bottom: 22px; }
+.done-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; align-items: center; }
+.done-actions .btn-outline { padding: 13px 22px; font-size: 0.95rem; }
+.toast { min-height: 1.5em; margin-top: 14px; font-size: 0.9rem; font-weight: 600; color: var(--primary-strong); }
+
+/* The celebration */
+.confetti { position: fixed; inset: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 60; }
+.confetti.still { position: absolute; width: 100%; height: 100%; border-radius: inherit; z-index: 0; }
+.stage-done > * { position: relative; z-index: 1; }
+
+footer { position: relative; z-index: 1; }
+
+@media (max-width: 560px) {
+  .join-main { padding: 84px 14px 28px; }
+  .join-card { padding: 60px 20px 24px; border-radius: 24px; }
+  .join-bubble {
+    left: 50%; bottom: auto; top: -50px; width: 250px; max-width: none; margin-left: -125px;
+    transform-origin: 50% 100%; border-radius: 16px; text-align: center;
+  }
+  .join-main { padding-top: 120px; }
+  .btn-yes { padding: 14px 32px; }
+  .done-actions .btn, .done-actions .btn-outline { width: 100%; justify-content: center; text-align: center; }
+  .join-leaves .leaf-a { width: 110px; height: 184px; right: -40px; }
+  .join-leaves .leaf-c { display: none; }
+}

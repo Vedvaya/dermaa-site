@@ -258,7 +258,13 @@
         })
         .then(function () {
           form.reset();
-          say("You're on the list — we'll email you once, the day Dermaa launches.", true);
+          // A page can word its own thanks (the launch-offer page does).
+          say(form.getAttribute('data-lead-success') ||
+            "You're on the list — we'll email you once, the day Dermaa launches.", true);
+          // Lets a page celebrate without guessing success from the status text.
+          try {
+            form.dispatchEvent(new CustomEvent('dermaa:lead-saved', { bubbles: true }));
+          } catch (e) {}
         })
         .catch(function (err) {
           say(err.message || 'Could not save. Please try again.', false);

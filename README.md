@@ -27,3 +27,9 @@ The phones on the homepage are HTML mockups. To add real screenshots, put PNGs i
 ## Hosting
 
 Moving from GitHub Pages to Cloudflare Pages (so the repo can be private on the free plan). Cloudflare Pages serves `privacy.html` at `/privacy` and redirects the `.html` form there, so canonical URLs and the sitemap use the extensionless form. GitHub Pages answers at both, so this works on either host. `track.js` reports every page by its `.html` name so analytics history stays continuous.
+
+## Launch-offer page (`/join`)
+
+`join.html` is the campaign page linked from social posts: Yes/No (No runs away), email, celebration. It is `noindex` and kept out of the sitemap. Sign-ups go through the normal launch list; they are the `site_leads` rows with `signup_path = '/join.html'` (so the "first 10" are the earliest of those). Tag links per platform, e.g. `https://dermaa.app/join?utm_source=instagram&utm_medium=social&utm_campaign=launch_offer`.
+
+The preview image `assets/og-join.png` is generated: `python tools/make_og_join.py --fonts D:/flutterconfig/dermaa/dermaa/assets/fonts`. The offer's wording appears in `join.html`, the preview image and `privacy.html#website` — change all three together.
