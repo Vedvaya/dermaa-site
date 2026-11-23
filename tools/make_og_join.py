@@ -40,6 +40,24 @@ def quad(p0, p1, p2, n=24):
     return pts
 
 
+def cubic(p0, p1, p2, p3, n=28):
+    pts = []
+    for i in range(n + 1):
+        t = i / n
+        a, b, c, d = (1 - t) ** 3, 3 * (1 - t) ** 2 * t, 3 * (1 - t) * t * t, t ** 3
+        pts.append((a * p0[0] + b * p1[0] + c * p2[0] + d * p3[0],
+                    a * p0[1] + b * p1[1] + c * p2[1] + d * p3[1]))
+    return pts
+
+
+def heart(cx, cy, k):
+    """The same heart join.js throws in the celebration."""
+    def q(x, y):
+        return (cx + x * k, cy + y * k)
+    return (cubic(q(0, 0.8), q(-1.2, 0), q(-0.6, -0.95), q(0, -0.35))
+            + cubic(q(0, -0.35), q(0.6, -0.95), q(1.2, 0), q(0, 0.8)))
+
+
 def sparkle(cx, cy, r):
     k = 0.16
     pts = []
@@ -128,7 +146,7 @@ def main():
     def font(name, size):
         return ImageFont.truetype(os.path.join(args.fonts, name), size * SS)
 
-    lora = font("Lora-SemiBold.ttf", 82)
+    lora = font("Lora-SemiBold.ttf", 72)
     eyebrow = font("DMSans-SemiBold.ttf", 22)
     pill_bold = font("DMSans-Bold.ttf", 29)
     pill_med = font("DMSans-Medium.ttf", 27)
@@ -161,9 +179,10 @@ def main():
     d = ImageDraw.Draw(img)
     left = 80 * SS
 
-    spaced(d, (left, 78 * SS), "LAUNCH OFFER", eyebrow, SAGE_STRONG, 3.5 * SS)
-    d.text((left, 116 * SS), "Will you join", font=lora, fill=INK)
-    d.text((left, 212 * SS), "Dermaa?", font=lora, fill=SAGE_STRONG)
+    spaced(d, (left, 54 * SS), "OFFICIAL DATE INVITE", eyebrow, SAGE_STRONG, 3.5 * SS)
+    d.text((left, 88 * SS), "Will you go on", font=lora, fill=INK)
+    d.text((left, 170 * SS), "a date with", font=lora, fill=INK)
+    d.text((left, 252 * SS), "Dermaa?", font=lora, fill=SAGE_STRONG)
 
     def pill(y, text, fnt, fill, ink, icon_col):
         tw = d.textlength(text, font=fnt)
@@ -172,8 +191,8 @@ def main():
         d.polygon(sparkle(left + 34 * SS, y + h / 2, 13 * SS), fill=icon_col)
         d.text((left + 62 * SS, y + h / 2), text, font=fnt, fill=ink, anchor="lm")
 
-    pill(338 * SS, "1 month of Premium free at launch", pill_bold, SAGE_TINT, INK, SAGE_STRONG)
-    pill(414 * SS, "First 10 sign-ups get featured", pill_med, GOLD_TINT, TEXT, GOLD)
+    pill(370 * SS, "1 month of Premium free at launch", pill_bold, SAGE_TINT, INK, SAGE_STRONG)
+    pill(444 * SS, "First 10 sign-ups get featured", pill_med, GOLD_TINT, TEXT, GOLD)
 
     icon_path = os.path.join(os.path.dirname(__file__), "..", "assets", "app_icon.png")
     icon = Image.open(icon_path).convert("RGBA").resize((52 * SS, 52 * SS), Image.LANCZOS)
@@ -185,6 +204,9 @@ def main():
     # Sage, with the two buttons beneath.
     draw_sage(img, 780 * SS, 70 * SS, 330 * SS)
     d = ImageDraw.Draw(img)
+    # Sage has a crush.
+    d.polygon(heart(792 * SS, 128 * SS, 30 * SS), fill=ROSE)
+    d.polygon(heart(752 * SS, 78 * SS, 16 * SS), fill=ROSE + (170,))
     yx, yy, yw, yh = 764 * SS, 430 * SS, 190 * SS, 78 * SS
     d.rounded_rectangle((yx, yy, yx + yw, yy + yh), radius=yh / 2, fill=SAGE_STRONG)
     d.text((yx + yw / 2, yy + yh / 2), "Yes", font=btn, fill=WHITE, anchor="mm")

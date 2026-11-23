@@ -1,5 +1,5 @@
 /*
- * Dermaa launch-offer page (/join): "Will you join Dermaa?"
+ * Dermaa launch-offer page (/join): "Will you go on a date with Dermaa?"
  *
  * Three stages on one card: ask → email → done. "No" runs away a handful of
  * times with a playful line each time, then gives up and leaves; a press on it
@@ -30,6 +30,44 @@
 
   var SHARE_URL = 'https://dermaa.app/join?utm_source=share&utm_medium=referral&utm_campaign=launch_offer';
 
+  // ── The words. The page speaks in the voice of the "first date" post it is
+  // linked from: Dermaa as the partner who never ghosts. The jokes tease the
+  // No button, never the visitor. Keep a No line to ~24 characters (it must
+  // fit the button on a 360px phone) and a Sage line to ~40 (two lines of
+  // bubble at most).
+  var NO_POOL = [
+    'Are you ghosting me? 👻', 'Mixed signals much?', 'Red flag 🚩',
+    'Situationship energy', 'Swipe left? Really?', 'I text back, you know',
+    'Playing hard to get? 😏', "I'm not your ex 🙄", 'Left on read 💔',
+    'Is it something I said?', 'We were vibing though', 'Commitment issues? 👀',
+    'Third-wheeling again?', 'Wrong button, babe', 'Even your skin said Yes'
+  ];
+  var NO_GIVE_UP = ["Fine, it's a date 💌", "Okay okay, I'll wait", 'You win. Date night!'];
+  var SAGE_POOL = [
+    'Excuse me?? 😳', "I'd never leave you on read.", 'No mixed signals here, promise 💚',
+    "I'm literally available 24/7…", 'I already planned our skincare night 🧖',
+    'Your bestie is tired of third-wheeling.', "I'm not like other apps 💅",
+    "I track your water. That's love.", 'Ghosting me? On our first date?',
+    'Your skin already said yes 👀', "I'll pretend I didn't see that.",
+    'No drama, just glow. Try Yes.', 'Bold move. Wrong, but bold.', '*dramatic sigh*'
+  ];
+  var SAGE_GIVE_UP = ["Fine. It's a date then 😉", "I'll take that as a yes 💌"];
+  var GONE_NOTES = ['No has left the chat 👋', "Looks like it's a date 😉", 'No ghosted. Yes it is!'];
+  var SAY_YES = 'Yay! 💌';
+  var SAY_DONE = 'See you on our first date 💚';
+  var SHARE_TITLE = 'Will you go on a date with Dermaa? 💌';
+  var SHARE_TEXT = 'Found my perfect date: no ghosting, no mixed signals 💚 Sign up before Dermaa launches and get 1 month of Premium free';
+
+  function shuffle(list) {
+    var a = list.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+  function pickOne(list) { return list[Math.floor(Math.random() * list.length)]; }
+
   function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
 
   function go(stage) { card.setAttribute('data-stage', stage); }
@@ -50,9 +88,11 @@
   }, 4200);
 
   // ── The runaway No ──
-  var NO_LINES = ['Are you sure? 🥺', 'Think of your skin!', 'Sage will be sad…', "Can't catch me 😜", 'Nope!', 'Okay, okay…'];
-  var SAGE_LINES = ['Wait, really? 🥺', 'Your skin deserves this.', '*sniff*', 'Too slow! 😜', 'Just press Yes 🌿', "Fine. It's a yes then 😉"];
-  var MAX_TRIES = NO_LINES.length;
+  // This visit's lines: five drawn without repeats, then one that gives up.
+  var MAX_TRIES = 6;
+  var NO_LINES = shuffle(NO_POOL).slice(0, MAX_TRIES - 1).concat(pickOne(NO_GIVE_UP));
+  var SAGE_LINES = shuffle(SAGE_POOL).slice(0, MAX_TRIES - 1).concat(pickOne(SAGE_GIVE_UP));
+  var GONE_NOTE = pickOne(GONE_NOTES);
   var tries = 0, lastDodge = 0, hiding = false;
   var pos = { x: 0, y: 0 };
   var pointer = null;
@@ -139,8 +179,8 @@
       hiding = true;
       setTimeout(function () {
         no.classList.add('gone');
-        note.textContent = "Looks like that's a yes 😉";
-        live.textContent = "The No button gave up. Looks like that's a yes.";
+        note.textContent = GONE_NOTE;
+        live.textContent = 'The No button gave up. ' + GONE_NOTE;
         if (document.activeElement === no) yes.focus();
         var sg = sage();
         if (sg) sg.set({ pose: 'wave' });
@@ -176,7 +216,7 @@
   // ── Yes ──
   yes.addEventListener('click', function () {
     go('email');
-    say('Yay! 🎉');
+    say(SAY_YES);
     var s = sage();
     if (s) { s.lookAt(0, 0.4); s.cheer(1800); }
     var input = document.getElementById('join-email');
@@ -187,7 +227,7 @@
   document.addEventListener('dermaa:lead-saved', function (e) {
     if (!card.contains(e.target)) return;
     go('done');
-    say("You're in! See you at launch 💚");
+    say(SAY_DONE);
     var s = sage();
     if (s) { clearTimeout(s.cheerTimer); s.set({ pose: 'cheer' }); }
     var h = $('[data-done-heading]');
@@ -219,8 +259,8 @@
   if (shareBtn) shareBtn.addEventListener('click', function () {
     if (navigator.share) {
       navigator.share({
-        title: 'Will you join Dermaa?',
-        text: 'Sign up before Dermaa launches and get 1 month of Premium free 🌿',
+        title: SHARE_TITLE,
+        text: SHARE_TEXT,
         url: SHARE_URL
       }).catch(function (err) {
         if (!err || err.name !== 'AbortError') copyLink();
@@ -260,6 +300,11 @@
       ctx.quadraticCurveTo(r * 0.16, r * 0.16, 0, r);
       ctx.quadraticCurveTo(-r * 0.16, r * 0.16, -r, 0);
       ctx.quadraticCurveTo(-r * 0.16, -r * 0.16, 0, -r);
+    } else if (p.shape === 'heart') {
+      var k = s * 0.8;
+      ctx.moveTo(0, k * 0.8);
+      ctx.bezierCurveTo(-k * 1.2, 0, -k * 0.6, -k * 0.95, 0, -k * 0.35);
+      ctx.bezierCurveTo(k * 0.6, -k * 0.95, k * 1.2, 0, 0, k * 0.8);
     } else if (p.shape === 'ribbon') {
       ctx.rect(-s * 0.55, -s * 0.2, s * 1.1, s * 0.4);
     } else {
@@ -269,22 +314,26 @@
     ctx.restore();
   }
 
-  var SHAPES = ['leaf', 'leaf', 'spark', 'ribbon', 'dot'];
+  var SHAPES = ['leaf', 'leaf', 'spark', 'heart', 'ribbon', 'dot'];
+  var rose = '#B85C5C';
   function piece(x, y, angle, spread, speed, cols) {
     var a = angle + (Math.random() - 0.5) * spread * 2;
     var v = speed[0] + Math.random() * (speed[1] - speed[0]);
+    var shape = SHAPES[(Math.random() * SHAPES.length) | 0];
     return {
       x: x, y: y, vx: Math.cos(a) * v, vy: Math.sin(a) * v,
       rot: Math.random() * Math.PI * 2, vr: (Math.random() - 0.5) * 0.3,
       wob: Math.random() * Math.PI * 2, wobS: 0.08 + Math.random() * 0.12,
       size: 6 + Math.random() * 7, alpha: 1,
-      shape: SHAPES[(Math.random() * SHAPES.length) | 0],
-      color: cols[(Math.random() * cols.length) | 0]
+      shape: shape,
+      // Hearts are always rose, whatever the draw.
+      color: shape === 'heart' ? rose : cols[(Math.random() * cols.length) | 0]
     };
   }
 
   function celebrate() {
     var cols = colours();
+    rose = getComputedStyle(root).getPropertyValue('--rose').trim() || rose;
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
     var cv = document.createElement('canvas');
     cv.className = reduce ? 'confetti still' : 'confetti';
