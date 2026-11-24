@@ -23,7 +23,7 @@
   var note = $('[data-note]');
   var live = $('[data-no-live]');
   // No roams below the heading, so the question itself is never covered.
-  var roamTop = $('.stage-ask .offer');
+  var roamTop = $('.stage-ask .perks');
   var bubble = document.getElementById('join-bubble');
   var sageCanvas = document.getElementById('join-sage');
   function sage() { return sageCanvas ? sageCanvas.__sage : null; }
@@ -314,7 +314,8 @@
     ctx.restore();
   }
 
-  var SHAPES = ['leaf', 'leaf', 'spark', 'heart', 'ribbon', 'dot'];
+  // About a third hearts: it's a date.
+  var SHAPES = ['heart', 'heart', 'leaf', 'leaf', 'spark', 'ribbon', 'dot'];
   var rose = '#B85C5C';
   function piece(x, y, angle, spread, speed, cols) {
     var a = angle + (Math.random() - 0.5) * spread * 2;

@@ -35,7 +35,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Lora:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css?v=8" />
-  <link rel="stylesheet" href="assets/join.css?v=1" />
+  <link rel="stylesheet" href="assets/join.css?v=2" />
 </head>
 <body class="join-page">
 
@@ -48,12 +48,20 @@
       <path d="M82 50C66 44 56 30 56 16C72 20 82 34 82 50Z" />
       <path d="M100 14C104 6 112 2 118 2C118 10 112 16 100 14Z" />
     </symbol>
+    <symbol id="heart" viewBox="0 0 24 24">
+      <path d="M12 20.5S3.5 15.2 3.5 9.3A4.6 4.6 0 0 1 12 6.6a4.6 4.6 0 0 1 8.5 2.7c0 5.9-8.5 11.2-8.5 11.2z" />
+    </symbol>
   </svg>
 
   <div class="join-leaves" aria-hidden="true">
     <svg class="leaf leaf-a"><use href="#sprig" /></svg>
     <svg class="leaf leaf-b"><use href="#sprig" /></svg>
     <svg class="leaf leaf-c"><use href="#sprig" /></svg>
+    <svg class="float-heart fh-1"><use href="#heart" /></svg>
+    <svg class="float-heart fh-2"><use href="#heart" /></svg>
+    <svg class="float-heart fh-3"><use href="#heart" /></svg>
+    <svg class="float-heart fh-4"><use href="#heart" /></svg>
+    <svg class="float-heart fh-5"><use href="#heart" /></svg>
   </div>
 
   <header class="nav">
@@ -69,24 +77,21 @@
   <main class="join-main">
     <section id="join" class="join-card" data-stage="ask">
 
+      <!-- A postage stamp on the invite's corner. -->
+      <span class="stamp" aria-hidden="true"><svg><use href="#heart" /></svg></span>
+
       <div class="join-sage" aria-hidden="true">
         <canvas data-sage data-size="104" data-pose="wave" data-follow id="join-sage"></canvas>
-        <p class="join-bubble" id="join-bubble">Psst… I have something to ask you 😳</p>
+        <p class="join-bubble" id="join-bubble">Psst… I have a question 😳</p>
       </div>
 
       <!-- 1 · The offer and the question -->
       <div class="stage stage-ask">
-        <p class="eyebrow">Your official date invite 💌</p>
+        <p class="eyebrow">Official date invite 💌</p>
         <h1>Will you go on a date with <em>Dermaa?</em></h1>
-        <ul class="offer">
-          <li>
-            <span class="offer-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="8.5" width="17" height="4" rx="1" /><path d="M5 12.5V20h14v-7.5M12 8.5V20M12 8.5C10.5 5 7 4.6 7 6.6 7 8.3 10 8.5 12 8.5zM12 8.5c1.5-3.5 5-3.9 5-1.9 0 1.7-3 1.9-5 1.9z" /></svg></span>
-            <span>Sign up now and get <strong>1 month of Premium free</strong> when Dermaa launches. Our first-date gift 🎁</span>
-          </li>
-          <li>
-            <span class="offer-icon gold"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.5 5.2 5.7.8-4.1 4 1 5.6L12 16.4l-5.1 2.7 1-5.6-4.1-4 5.7-.8z" /></svg></span>
-            <span>The <strong>first 10</strong> people to sign up here get <strong>featured on our social media</strong>. We'll ask you first.</span>
-          </li>
+        <ul class="perks">
+          <li class="perk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="8.5" width="17" height="4" rx="1" /><path d="M5 12.5V20h14v-7.5M12 8.5V20M12 8.5C10.5 5 7 4.6 7 6.6 7 8.3 10 8.5 12 8.5zM12 8.5c1.5-3.5 5-3.9 5-1.9 0 1.7-3 1.9-5 1.9z" /></svg>Free Premium month at launch</li>
+          <li class="perk rose"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.5 5.2 5.7.8-4.1 4 1 5.6L12 16.4l-5.1 2.7 1-5.6-4.1-4 5.7-.8z" /></svg>First 10 featured, with your OK</li>
         </ul>
         <div class="choices">
           <button type="button" class="btn btn-yes" data-yes data-track="join_yes">Yes 💚</button>
@@ -98,34 +103,31 @@
 
       <!-- 2 · Where to send it -->
       <div class="stage stage-email">
-        <h2><span class="js-only">Yay! 💌 </span>Where should we send your <em>date invite?</em></h2>
+        <h2>Where do I send your <em>invite?</em> 💌</h2>
         <form class="lead-form" data-lead-form novalidate
               data-lead-success="It's a date! Your free month is saved for launch day.">
           <label class="sr-only" for="join-email">Email address</label>
           <div class="lead-row">
             <input id="join-email" type="email" name="email" placeholder="you@example.com" autocomplete="email" required />
-            <button type="submit" class="btn" data-track="lead_submit">Send my date invite</button>
+            <button type="submit" class="btn" data-track="lead_submit">Send my invite</button>
           </div>
           <input class="hp" type="text" name="company" tabindex="-1" autocomplete="off" aria-hidden="true" />
           <p class="lead-status" data-lead-status role="status" aria-live="polite"></p>
-          <p class="lead-fine">We'll email you when Dermaa launches on Google Play, with
-          how to claim your free Premium month. If you're one of the first 10, we'll
-          email you first to ask whether we can feature you. Nothing else.
-          <a href="privacy.html#website">How we use it</a></p>
+          <p class="lead-fine">One email at launch with your free month. First 10? We'll
+          ask before featuring you. <a href="privacy.html#website">How we use it</a></p>
         </form>
       </div>
 
       <!-- 3 · Celebration -->
       <div class="stage stage-done">
         <h2 tabindex="-1" data-done-heading>It's a date! <em>💌</em></h2>
-        <p class="done-lead">Your free month is saved for launch day. Watch your inbox for your invite.</p>
-        <p class="done-sub">Know someone who's tired of being ghosted?</p>
+        <p class="done-lead">Your free month is saved. See you at launch 💚</p>
         <div class="done-actions">
           <button type="button" class="btn" data-share data-track="join_share">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="2.5" /><circle cx="6" cy="12" r="2.5" /><circle cx="18" cy="19" r="2.5" /><path d="M8.2 10.8l7.6-4.4M8.2 13.2l7.6 4.4" /></svg>
             Send to a friend
           </button>
-          <a class="btn-outline" href="index.html" data-track="join_see_more">See what Dermaa does →</a>
+          <a class="done-link" href="index.html" data-track="join_see_more">See what Dermaa does →</a>
         </div>
         <p class="toast" data-toast role="status" aria-live="polite"></p>
       </div>
@@ -147,6 +149,6 @@
   <script src="assets/track.js?v=4" defer></script>
   <script src="assets/site.js?v=1" defer></script>
   <script src="assets/sage.js?v=1" defer></script>
-  <script src="assets/join.js?v=2" defer></script>
+  <script src="assets/join.js?v=3" defer></script>
 </body>
 </html>
